@@ -42,6 +42,8 @@ jobs:
           echo "shards_opts: ${{ github.event.inputs.shards_opts }}"
           echo "crystal_build_opts: ${{ github.event.inputs.crystal_build_opts }}"
           echo "previous_crystal_release: ${{ github.event.inputs.previous_crystal_release }}"
+      - name: Test ldd available
+        run: ldd /bin/sh
       - name: Checkout test-ecosystem
         uses: actions/checkout@v2
         with:
@@ -116,6 +118,10 @@ jobs:
           cd crystal
           make crystal CRYSTAL_CONFIG_LIBRARY_PATH=$(readlink -f ../crystal-lib) ${{ github.event.inputs.crystal_build_opts }}
           bin/crystal --version
+          ldd bin/crystal
+      - name: Check cached Crystal dynamic dependencies
+        if: steps.build-cache.outputs.cache-hit == 'true'
+        run: ldd bin/crystal
       - name: Build Shards
         if: steps.build-cache.outputs.cache-hit != 'true'
         run: |
