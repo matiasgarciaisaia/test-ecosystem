@@ -15,6 +15,8 @@ function git_checkout() {
   local URL="$1"
   local TARGET="$BATS_TMPDIR/workdir/${1##*/}"
 
+  local REFERENCE="$2"
+
   if [ -d "$TARGET" ]; then
     cd "$TARGET" || exit 1
     git checkout --force origin/HEAD
@@ -23,6 +25,10 @@ function git_checkout() {
   else
     git clone --recursive "$URL" "$TARGET"
     cd "$TARGET" || exit 1
+  fi
+
+  if [ -n "$REFERENCE" ]; then
+    git checkout --force "$REFERENCE"
   fi
 
   git describe --tags

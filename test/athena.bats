@@ -3,7 +3,7 @@
 function setup_file() {
   load helper/common.bash
 
-  git_checkout https://github.com/athena-framework/athena
+  git_checkout https://github.com/athena-framework/athena b907f78002ce0d59a74b51d048f238991a02c9fb
 
   SHARDS_OVERRIDE=shard.dev.yml $SHARDS install
 }
